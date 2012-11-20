@@ -66,6 +66,10 @@
 
 -(void) enableMotionTracking {
     self.motionManager = [[CMMotionManager alloc] init];
+    self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0;
+    
+    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
+    
     CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
     self.referenceAttitude = deviceMotion.attitude;
     
@@ -79,6 +83,7 @@
     [super viewDidLoad];
 
     [self setupSocket];
+    [self enableMotionTracking];
 }
 
 - (void)didReceiveMemoryWarning
@@ -106,7 +111,7 @@
 {
     long tag = 001;
     
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
     
     CMAcceleration acceleration = deviceMotion.userAcceleration;
     CMRotationRate rotationRate = deviceMotion.rotationRate;
