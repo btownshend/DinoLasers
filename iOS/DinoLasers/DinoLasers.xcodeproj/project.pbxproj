@@ -1,0 +1,347 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BBA93609165AFAAB00567BD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93608165AFAAB00567BD0 /* UIKit.framework */; };
+		BBA9360B165AFAAB00567BD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360A165AFAAB00567BD0 /* Foundation.framework */; };
+		BBA9360D165AFAAB00567BD0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360C165AFAAB00567BD0 /* CoreGraphics.framework */; };
+		BBA93613165AFAAB00567BD0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BBA93611165AFAAB00567BD0 /* InfoPlist.strings */; };
+		BBA93615165AFAAB00567BD0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93614165AFAAB00567BD0 /* main.m */; };
+		BBA93619165AFAAB00567BD0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93618165AFAAB00567BD0 /* AppDelegate.m */; };
+		BBA9361B165AFAAB00567BD0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA9361A165AFAAB00567BD0 /* Default.png */; };
+		BBA9361D165AFAAB00567BD0 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA9361C165AFAAB00567BD0 /* Default@2x.png */; };
+		BBA9361F165AFAAB00567BD0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */; };
+		BBA93622165AFAAB00567BD0 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93621165AFAAB00567BD0 /* MainViewController.m */; };
+		BBA93625165AFAAB00567BD0 /* FlipsideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */; };
+		BBA93628165AFAAB00567BD0 /* MainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA93626165AFAAB00567BD0 /* MainViewController.xib */; };
+		BBA9362B165AFAAB00567BD0 /* FlipsideViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */; };
+		BBA93635165AFAE700567BD0 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */; };
+		BBA93636165AFAE700567BD0 /* GCDAsyncUdpSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */; };
+		BBA93638165B064500567BD0 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93637165B064500567BD0 /* Security.framework */; };
+		BBA9363A165B064C00567BD0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93639165B064B00567BD0 /* CFNetwork.framework */; };
+		BBA9363C165B0D4500567BD0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363B165B0D4500567BD0 /* CoreMotion.framework */; };
+		BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BBA93604165AFAAB00567BD0 /* DinoLasers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DinoLasers.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BBA93608165AFAAB00567BD0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BBA9360A165AFAAB00567BD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BBA9360C165AFAAB00567BD0 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BBA93610165AFAAB00567BD0 /* DinoLasers-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DinoLasers-Info.plist"; sourceTree = "<group>"; };
+		BBA93612165AFAAB00567BD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BBA93614165AFAAB00567BD0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BBA93616165AFAAB00567BD0 /* DinoLasers-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DinoLasers-Prefix.pch"; sourceTree = "<group>"; };
+		BBA93617165AFAAB00567BD0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		BBA93618165AFAAB00567BD0 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		BBA9361A165AFAAB00567BD0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		BBA9361C165AFAAB00567BD0 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		BBA93620165AFAAB00567BD0 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		BBA93621165AFAAB00567BD0 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		BBA93623165AFAAB00567BD0 /* FlipsideViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FlipsideViewController.h; sourceTree = "<group>"; };
+		BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FlipsideViewController.m; sourceTree = "<group>"; };
+		BBA93627165AFAAB00567BD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainViewController.xib; sourceTree = "<group>"; };
+		BBA9362A165AFAAB00567BD0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/FlipsideViewController.xib; sourceTree = "<group>"; };
+		BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncUdpSocket.h; sourceTree = "<group>"; };
+		BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncUdpSocket.m; sourceTree = "<group>"; };
+		BBA93637165B064500567BD0 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BBA93639165B064B00567BD0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		BBA9363B165B0D4500567BD0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BBA93601165AFAAB00567BD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */,
+				BBA9363C165B0D4500567BD0 /* CoreMotion.framework in Frameworks */,
+				BBA9363A165B064C00567BD0 /* CFNetwork.framework in Frameworks */,
+				BBA93638165B064500567BD0 /* Security.framework in Frameworks */,
+				BBA93609165AFAAB00567BD0 /* UIKit.framework in Frameworks */,
+				BBA9360B165AFAAB00567BD0 /* Foundation.framework in Frameworks */,
+				BBA9360D165AFAAB00567BD0 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BBA935F9165AFAAB00567BD0 = {
+			isa = PBXGroup;
+			children = (
+				BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */,
+				BBA9363B165B0D4500567BD0 /* CoreMotion.framework */,
+				BBA93639165B064B00567BD0 /* CFNetwork.framework */,
+				BBA93637165B064500567BD0 /* Security.framework */,
+				BBA9360E165AFAAB00567BD0 /* DinoLasers */,
+				BBA93607165AFAAB00567BD0 /* Frameworks */,
+				BBA93605165AFAAB00567BD0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BBA93605165AFAAB00567BD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93604165AFAAB00567BD0 /* DinoLasers.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BBA93607165AFAAB00567BD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93608165AFAAB00567BD0 /* UIKit.framework */,
+				BBA9360A165AFAAB00567BD0 /* Foundation.framework */,
+				BBA9360C165AFAAB00567BD0 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BBA9360E165AFAAB00567BD0 /* DinoLasers */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93617165AFAAB00567BD0 /* AppDelegate.h */,
+				BBA93618165AFAAB00567BD0 /* AppDelegate.m */,
+				BBA93620165AFAAB00567BD0 /* MainViewController.h */,
+				BBA93621165AFAAB00567BD0 /* MainViewController.m */,
+				BBA93623165AFAAB00567BD0 /* FlipsideViewController.h */,
+				BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */,
+				BBA93626165AFAAB00567BD0 /* MainViewController.xib */,
+				BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */,
+				BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */,
+				BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */,
+				BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */,
+				BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */,
+				BBA9360F165AFAAB00567BD0 /* Supporting Files */,
+			);
+			path = DinoLasers;
+			sourceTree = "<group>";
+		};
+		BBA9360F165AFAAB00567BD0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93610165AFAAB00567BD0 /* DinoLasers-Info.plist */,
+				BBA93611165AFAAB00567BD0 /* InfoPlist.strings */,
+				BBA93614165AFAAB00567BD0 /* main.m */,
+				BBA93616165AFAAB00567BD0 /* DinoLasers-Prefix.pch */,
+				BBA9361A165AFAAB00567BD0 /* Default.png */,
+				BBA9361C165AFAAB00567BD0 /* Default@2x.png */,
+				BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BBA93603165AFAAB00567BD0 /* DinoLasers */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BBA9362E165AFAAB00567BD0 /* Build configuration list for PBXNativeTarget "DinoLasers" */;
+			buildPhases = (
+				BBA93600165AFAAB00567BD0 /* Sources */,
+				BBA93601165AFAAB00567BD0 /* Frameworks */,
+				BBA93602165AFAAB00567BD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DinoLasers;
+			productName = DinoLasers;
+			productReference = BBA93604165AFAAB00567BD0 /* DinoLasers.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BBA935FB165AFAAB00567BD0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = DinoLasers;
+			};
+			buildConfigurationList = BBA935FE165AFAAB00567BD0 /* Build configuration list for PBXProject "DinoLasers" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BBA935F9165AFAAB00567BD0;
+			productRefGroup = BBA93605165AFAAB00567BD0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BBA93603165AFAAB00567BD0 /* DinoLasers */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BBA93602165AFAAB00567BD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBA93613165AFAAB00567BD0 /* InfoPlist.strings in Resources */,
+				BBA9361B165AFAAB00567BD0 /* Default.png in Resources */,
+				BBA9361D165AFAAB00567BD0 /* Default@2x.png in Resources */,
+				BBA9361F165AFAAB00567BD0 /* Default-568h@2x.png in Resources */,
+				BBA93628165AFAAB00567BD0 /* MainViewController.xib in Resources */,
+				BBA9362B165AFAAB00567BD0 /* FlipsideViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BBA93600165AFAAB00567BD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BBA93615165AFAAB00567BD0 /* main.m in Sources */,
+				BBA93619165AFAAB00567BD0 /* AppDelegate.m in Sources */,
+				BBA93622165AFAAB00567BD0 /* MainViewController.m in Sources */,
+				BBA93625165AFAAB00567BD0 /* FlipsideViewController.m in Sources */,
+				BBA93635165AFAE700567BD0 /* GCDAsyncSocket.m in Sources */,
+				BBA93636165AFAE700567BD0 /* GCDAsyncUdpSocket.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BBA93611165AFAAB00567BD0 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BBA93612165AFAAB00567BD0 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BBA93626165AFAAB00567BD0 /* MainViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BBA93627165AFAAB00567BD0 /* en */,
+			);
+			name = MainViewController.xib;
+			sourceTree = "<group>";
+		};
+		BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BBA9362A165AFAAB00567BD0 /* en */,
+			);
+			name = FlipsideViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BBA9362C165AFAAB00567BD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BBA9362D165AFAAB00567BD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BBA9362F165AFAAB00567BD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DinoLasers/DinoLasers-Prefix.pch";
+				INFOPLIST_FILE = "DinoLasers/DinoLasers-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BBA93630165AFAAB00567BD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DinoLasers/DinoLasers-Prefix.pch";
+				INFOPLIST_FILE = "DinoLasers/DinoLasers-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BBA935FE165AFAAB00567BD0 /* Build configuration list for PBXProject "DinoLasers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBA9362C165AFAAB00567BD0 /* Debug */,
+				BBA9362D165AFAAB00567BD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BBA9362E165AFAAB00567BD0 /* Build configuration list for PBXNativeTarget "DinoLasers" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBA9362F165AFAAB00567BD0 /* Debug */,
+				BBA93630165AFAAB00567BD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BBA935FB165AFAAB00567BD0 /* Project object */;
+}
