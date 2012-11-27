@@ -11,6 +11,7 @@
 #import "MainViewController.h"
 #import "GCDAsyncUdpSocket.h"
 #import "UDPConnection.h"
+#import "LogConnection.h"
 
 @interface MainViewController () {
     
@@ -19,6 +20,9 @@
 @property (nonatomic, strong) CMMotionManager *motionManager;
 @property (nonatomic, strong) CMAttitude *referenceAttitude;
 @property (nonatomic, strong) NSString *markerString;
+@property (nonatomic, strong) UDPConnection *udpConnection;
+@property (nonatomic, strong) LogConnection *logConnection;
+@property (nonatomic, assign) long tag;
 
 - (NSString *)currentMotionString;
 
@@ -28,11 +32,23 @@
 @synthesize sendButton;
 @synthesize motionManager;
 @synthesize referenceAttitude;
-@synthesize udpConnection;
 @synthesize markerString;
+@synthesize udpConnection;
+@synthesize logConnection;
+@synthesize tag;
 
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    [self enableMotionTracking];
+    
+    [self updatePersistenceConnections];
+}
 
 -(void) enableMotionTracking {
+    self.tag = 001;
+    
     self.motionManager = [[CMMotionManager alloc] init];
     self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0;
     
@@ -45,14 +61,27 @@
     [motionManager startAccelerometerUpdates];
 }
 
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    self.udpConnection = [[UDPConnection alloc] init];
-    [self.udpConnection setupSocket];
+- (void)updatePersistenceConnections {
+    PersistenceMode currPersistenceMode = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
     
-    [self enableMotionTracking];
+    if (currPersistenceMode == PersistenceModeNone) {
+        currPersistenceMode = PersistenceModeUDP | PersistenceModeLogFile;
+    }
+    
+    // setup UDPConnection if enabled
+    if (currPersistenceMode & PersistenceModeUDP) {
+        if (!self.udpConnection) {
+            self.udpConnection = [[UDPConnection alloc] init];
+            [self.udpConnection setupSocket];
+        }
+    }
+    
+    // setup LogConnection if enabled
+    if (currPersistenceMode & PersistenceModeLogFile) {
+        if (!self.logConnection) {
+            self.logConnection = [[LogConnection alloc] init];
+        }
+    }
 }
 
 
@@ -75,9 +104,14 @@
 
     NSLog(@"motionString: %@", motionString);
     
-    long tag = 001;
+    // pass update to udpConnection if it exists
     [self.udpConnection sendMessage:motionString withTag:tag];
     
+    // pass update to logConnection if it exists
+    [self.logConnection printLineToLog:motionString];
+    
+    // increment the tag
+    self.tag++;
 }
 
 /**

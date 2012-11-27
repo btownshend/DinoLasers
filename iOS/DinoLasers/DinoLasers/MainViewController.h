@@ -8,14 +8,11 @@
 
 #import "FlipsideViewController.h"
 
-@class UDPConnection;
-
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate> {
 
 }
 
 @property (nonatomic, strong) IBOutlet UIButton *sendButton;
-@property (nonatomic, strong) UDPConnection *udpConnection;
 
 - (IBAction)showInfo:(id)sender;
 

@@ -16,4 +16,6 @@
 
 @property (strong, nonatomic) MainViewController *mainViewController;
 
+- (NSString *)applicationDocumentsDirectory;
+
 @end
