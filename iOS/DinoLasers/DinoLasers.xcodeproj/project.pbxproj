@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB30D31416650F7D00ACAE1C /* UDPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB30D31316650F7D00ACAE1C /* UDPConnection.m */; };
 		BBA93609165AFAAB00567BD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93608165AFAAB00567BD0 /* UIKit.framework */; };
 		BBA9360B165AFAAB00567BD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360A165AFAAB00567BD0 /* Foundation.framework */; };
 		BBA9360D165AFAAB00567BD0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360C165AFAAB00567BD0 /* CoreGraphics.framework */; };
@@ -29,6 +30,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BB30D31216650F7D00ACAE1C /* UDPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPConnection.h; sourceTree = "<group>"; };
+		BB30D31316650F7D00ACAE1C /* UDPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UDPConnection.m; sourceTree = "<group>"; };
 		BBA93604165AFAAB00567BD0 /* DinoLasers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DinoLasers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA93608165AFAAB00567BD0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BBA9360A165AFAAB00567BD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -76,6 +79,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB30D30F16650EC400ACAE1C /* 3rd Party */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */,
+				BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */,
+				BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */,
+				BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */,
+			);
+			name = "3rd Party";
+			sourceTree = "<group>";
+		};
+		BB30D31116650EE500ACAE1C /* Interface Builder */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93626165AFAAB00567BD0 /* MainViewController.xib */,
+				BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */,
+			);
+			name = "Interface Builder";
+			sourceTree = "<group>";
+		};
 		BBA935F9165AFAAB00567BD0 = {
 			isa = PBXGroup;
 			children = (
@@ -116,12 +139,10 @@
 				BBA93621165AFAAB00567BD0 /* MainViewController.m */,
 				BBA93623165AFAAB00567BD0 /* FlipsideViewController.h */,
 				BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */,
-				BBA93626165AFAAB00567BD0 /* MainViewController.xib */,
-				BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */,
-				BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */,
-				BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */,
-				BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */,
-				BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */,
+				BB30D31216650F7D00ACAE1C /* UDPConnection.h */,
+				BB30D31316650F7D00ACAE1C /* UDPConnection.m */,
+				BB30D31116650EE500ACAE1C /* Interface Builder */,
+				BB30D30F16650EC400ACAE1C /* 3rd Party */,
 				BBA9360F165AFAAB00567BD0 /* Supporting Files */,
 			);
 			path = DinoLasers;
@@ -214,6 +235,7 @@
 				BBA93625165AFAAB00567BD0 /* FlipsideViewController.m in Sources */,
 				BBA93635165AFAE700567BD0 /* GCDAsyncSocket.m in Sources */,
 				BBA93636165AFAE700567BD0 /* GCDAsyncUdpSocket.m in Sources */,
+				BB30D31416650F7D00ACAE1C /* UDPConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +362,7 @@
 				BBA93630165AFAAB00567BD0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

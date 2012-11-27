@@ -1,0 +1,29 @@
+//
+//  UDPConnection.h
+//  DinoLasers
+//
+//  Created by Paul Mans on 11/27/12.
+//  Copyright (c) 2012 DinoLasers. All rights reserved.
+//
+
+#import <CoreMotion/CoreMotion.h>
+#import <Foundation/Foundation.h>
+#import "GCDAsyncUdpSocket.h"
+
+@interface UDPConnection : NSObject
+
+@property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
+@property (nonatomic, strong) NSString *socketHost;
+@property (nonatomic, assign) int hostPort;
+@property (nonatomic, assign) int localPort;
+
+/**
+ *  Will instantiate the socket with the current host and port values
+ */
+- (void)setupSocket;
+
+- (void)sendData:(NSData *)data toHost:(NSString *)host port:(int)port withTimeout:(int)timeout tag:(long)tag;
+
+- (void)sendMessage:(NSString *)message withTag:(long)tag;
+
+@end
