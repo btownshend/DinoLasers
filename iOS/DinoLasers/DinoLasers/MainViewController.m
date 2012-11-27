@@ -7,6 +7,7 @@
 //
 
 #import <CoreMotion/CoreMotion.h>
+#import <QuartzCore/QuartzCore.h>
 #import "MainViewController.h"
 #import "GCDAsyncUdpSocket.h"
 #import "UDPConnection.h"
@@ -17,6 +18,9 @@
 
 @property (nonatomic, strong) CMMotionManager *motionManager;
 @property (nonatomic, strong) CMAttitude *referenceAttitude;
+@property (nonatomic, strong) NSString *markerString;
+
+- (NSString *)currentMotionString;
 
 @end
 
@@ -25,7 +29,7 @@
 @synthesize motionManager;
 @synthesize referenceAttitude;
 @synthesize udpConnection;
-
+@synthesize markerString;
 
 
 -(void) enableMotionTracking {
@@ -67,14 +71,8 @@
 
 - (IBAction)send:(id)sender {
     
-    
-    CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
-    
-    CMAcceleration acceleration = deviceMotion.userAcceleration;
-    CMRotationRate rotationRate = deviceMotion.rotationRate;
-    
-    NSString *motionString = [NSString stringWithFormat:@"%f,%f,%f,%f,%f,%f", acceleration.x, acceleration.y, acceleration.z, rotationRate.x, rotationRate.y, rotationRate.z];
-    
+    NSString *motionString = [self currentMotionString];
+
     NSLog(@"motionString: %@", motionString);
     
     long tag = 001;
@@ -82,5 +80,26 @@
     
 }
 
+/**
+ *  Motion string with the current acceleration and rotation values. 
+ *  Format: "timestamp, accelX, accelY, accelZ, rotationX, rotationY, rotationZ, markerString"
+ *
+ *  timestamp:      milliseconds
+ *  accel vals:     doubles
+ *  rotation vals:  doubles
+ *  markerString:   used to mark a sequence of values
+ */
+- (NSString *)currentMotionString {
+    CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
+    
+    CMAcceleration acceleration = deviceMotion.userAcceleration;
+    CMRotationRate rotationRate = deviceMotion.rotationRate;
+    
+    double millis = CACurrentMediaTime();
+    
+    NSString *motionString = [NSString stringWithFormat:@"%f,%f,%f,%f,%f,%f,%f,%@", millis, acceleration.x, acceleration.y, acceleration.z, rotationRate.x, rotationRate.y, rotationRate.z, self.markerString];
+    
+    return motionString;
+}
 
 @end
