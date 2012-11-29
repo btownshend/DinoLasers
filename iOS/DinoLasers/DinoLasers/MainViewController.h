@@ -12,10 +12,9 @@
 
 }
 
-@property (nonatomic, strong) IBOutlet UIButton *sendButton;
+@property (nonatomic, strong) IBOutlet UITextField *markerStringTextField;
 
-- (IBAction)showInfo:(id)sender;
+@property (strong, nonatomic) IBOutlet UITextView *logTextView;
 
-- (IBAction)send:(id)sender;
 
 @end

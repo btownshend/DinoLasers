@@ -22,44 +22,60 @@
 @property (nonatomic, strong) NSString *markerString;
 @property (nonatomic, strong) UDPConnection *udpConnection;
 @property (nonatomic, strong) LogConnection *logConnection;
+@property (nonatomic, assign) BOOL isRecording;
+@property (nonatomic, strong) NSString *logString;
 @property (nonatomic, assign) long tag;
+@property (nonatomic, strong) NSTimer *timer;
 
 - (NSString *)currentMotionString;
 
 @end
 
 @implementation MainViewController
-@synthesize sendButton;
+@synthesize markerStringTextField;
 @synthesize motionManager;
 @synthesize referenceAttitude;
 @synthesize markerString;
 @synthesize udpConnection;
 @synthesize logConnection;
+@synthesize isRecording;
+@synthesize logString;
 @synthesize tag;
+@synthesize timer;
+
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.isRecording = NO;
+    
     [self enableMotionTracking];
     
     [self updatePersistenceConnections];
+    
+    // begin timer
+    double timeInterval = 1.0/60.0;
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    
+    
+    // Make view adjustments
+    // ...
+    
+    self.logString = @"";
+    self.logTextView.text = nil;
+    self.logTextView.layer.cornerRadius = 4;
+    self.logTextView.backgroundColor = [UIColor grayColor];
+    
 }
 
--(void) enableMotionTracking {
-    self.tag = 001;
-    
-    self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0;
-    
-    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-    
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-    self.referenceAttitude = deviceMotion.attitude;
-    
-    [motionManager startGyroUpdates];
-    [motionManager startAccelerometerUpdates];
+// Timer callback
+-(void)timerFired:(NSTimer *)theTimer {
+    if (isRecording) {
+        [self processMotionData];
+    }
 }
+
 
 - (void)updatePersistenceConnections {
     PersistenceMode currPersistenceMode = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
@@ -84,6 +100,19 @@
     }
 }
 
+#define LOG_BUFFER_SIZE 300
+
+- (void)appendToLog:(NSString *)suffix {
+    logString = [logString stringByAppendingString:suffix];
+    if (logString.length >= LOG_BUFFER_SIZE) {
+        logString = [logString substringFromIndex:logString.length - LOG_BUFFER_SIZE];
+    }
+    
+    self.logTextView.text = logString;
+    
+    NSRange range = NSMakeRange(self.logTextView.text.length - 1, 1);
+    [self.logTextView scrollRangeToVisible:range];
+}
 
 #pragma mark - Flipside View
 
@@ -98,11 +127,31 @@
     [self presentViewController:controller animated:YES completion:nil];
 }
 
-- (IBAction)send:(id)sender {
-    
-    NSString *motionString = [self currentMotionString];
+#pragma mark - IBActions
 
+- (IBAction)toggleRecording:(id)sender {
+    isRecording = !isRecording;
+    NSLog(@"Updating recording state: %@", isRecording ? @"YES" : @"NO");
+}
+
+- (IBAction)markString:(id)sender {
+    if ([self.markerStringTextField.text isEqualToString:@""]) {
+        self.markerString = nil;
+    } else {
+        self. markerString = self.markerStringTextField.text;
+    }
+    NSLog(@"Updated Marker String to: %@", markerString);
+    [self.markerStringTextField resignFirstResponder];
+}
+
+
+#pragma mark - CoreMotion
+
+- (void)processMotionData {
+    NSString *motionString = [self currentMotionString];
+    
     NSLog(@"motionString: %@", motionString);
+    [self appendToLog:motionString];
     
     // pass update to udpConnection if it exists
     [self.udpConnection sendMessage:motionString withTag:tag];
@@ -112,6 +161,25 @@
     
     // increment the tag
     self.tag++;
+}
+
+
+-(void) enableMotionTracking {
+    self.tag = 001;
+    
+    self.motionManager = [[CMMotionManager alloc] init];
+    
+    self.motionManager.deviceMotionUpdateInterval = 0.01;   // 100 Hz
+    self.motionManager.accelerometerUpdateInterval = 0.01;  // 100 Hz
+    self.motionManager.gyroUpdateInterval = 0.01;           // 100 Hz
+    
+    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
+    
+    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
+    self.referenceAttitude = deviceMotion.attitude;
+    
+    [motionManager startGyroUpdates];
+    [motionManager startAccelerometerUpdates];
 }
 
 /**

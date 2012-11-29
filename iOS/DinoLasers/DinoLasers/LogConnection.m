@@ -33,8 +33,18 @@
 - (void)beginNewFile {
     NSString *docsDirectory = [((AppDelegate *)[[UIApplication sharedApplication] delegate]) applicationDocumentsDirectory];
     
-    NSDate *date = [NSDate date];
-    NSString *fileName = [NSString stringWithFormat:@"%@_%@", self.fileNamePrefix, [date description]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeStyle:NSDateFormatterLongStyle];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    
+    // Some filesystems hate colons
+    NSString *dateString = [[dateFormatter stringFromDate:[NSDate date]] stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+    // I hate spaces
+    dateString = [dateString stringByReplacingOccurrencesOfString:@" " withString:@"_"];
+    // Nobody can stand forward slashes
+    dateString = [dateString stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@_%@", self.fileNamePrefix, dateString];
     
     NSString *filePath = [docsDirectory stringByAppendingPathComponent:fileName];
     
