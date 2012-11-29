@@ -60,13 +60,20 @@
     
     
     // Make view adjustments
-    // ...
+    // ...    
+    [self updateToggleRecordingButton];
     
     self.logString = @"";
     self.logTextView.text = nil;
     self.logTextView.layer.cornerRadius = 4;
     self.logTextView.backgroundColor = [UIColor grayColor];
     
+}
+
+- (void)updateToggleRecordingButton {
+    NSString *text = isRecording ? @"Pause" : @"Play";
+    
+    [self.toggleLoggingButton setTitle:text forState:UIControlStateNormal];
 }
 
 // Timer callback
@@ -114,24 +121,22 @@
     [self.logTextView scrollRangeToVisible:range];
 }
 
-#pragma mark - Flipside View
-
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
-    [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (IBAction)showInfo:(id)sender {    
-    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideViewController" bundle:nil];
-    controller.delegate = self;
-    controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self presentViewController:controller animated:YES completion:nil];
-}
 
 #pragma mark - IBActions
 
 - (IBAction)toggleRecording:(id)sender {
     isRecording = !isRecording;
+    
+    [self updateToggleRecordingButton];
+    
     NSLog(@"Updating recording state: %@", isRecording ? @"YES" : @"NO");
+}
+
+- (IBAction)showInfo:(id)sender {
+    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideViewController" bundle:nil];
+    controller.delegate = self;
+    controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    [self presentViewController:controller animated:YES completion:nil];
 }
 
 - (IBAction)markString:(id)sender {
@@ -202,6 +207,12 @@
     NSString *motionString = [NSString stringWithFormat:@"%f,%f,%f,%f,%f,%f,%f,%@", millis, acceleration.x, acceleration.y, acceleration.z, rotationRate.x, rotationRate.y, rotationRate.z, self.markerString];
     
     return motionString;
+}
+
+#pragma mark - Flipside View
+
+- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
