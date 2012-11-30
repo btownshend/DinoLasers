@@ -13,6 +13,8 @@
 #import "UDPConnection.h"
 #import "LogConnection.h"
 
+#define UPDATE_INTERVAL 1.0/60.0
+
 @interface MainViewController () {
     
 }
@@ -55,7 +57,7 @@
     [self updatePersistenceConnections];
     
     // begin timer
-    double timeInterval = 1.0/60.0;
+    double timeInterval = UPDATE_INTERVAL;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
     
     
@@ -95,6 +97,7 @@
     if (currPersistenceMode & PersistenceModeUDP) {
         if (!self.udpConnection) {
             self.udpConnection = [[UDPConnection alloc] init];
+            self.udpConnection.socketHost = @"10.0.1.19";
             [self.udpConnection setupSocket];
         }
     }
@@ -174,9 +177,9 @@
     
     self.motionManager = [[CMMotionManager alloc] init];
     
-    self.motionManager.deviceMotionUpdateInterval = 0.01;   // 100 Hz
-    self.motionManager.accelerometerUpdateInterval = 0.01;  // 100 Hz
-    self.motionManager.gyroUpdateInterval = 0.01;           // 100 Hz
+    self.motionManager.deviceMotionUpdateInterval = UPDATE_INTERVAL;
+    self.motionManager.accelerometerUpdateInterval = UPDATE_INTERVAL;
+    self.motionManager.gyroUpdateInterval = UPDATE_INTERVAL;
     
     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
     

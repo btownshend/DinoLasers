@@ -29,6 +29,8 @@
 		BBA9363A165B064C00567BD0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93639165B064B00567BD0 /* CFNetwork.framework */; };
 		BBA9363C165B0D4500567BD0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363B165B0D4500567BD0 /* CoreMotion.framework */; };
 		BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */; };
+		BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */; };
+		BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,6 +67,8 @@
 		BBA93639165B064B00567BD0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BBA9363B165B0D4500567BD0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dino_laser_icon.png; sourceTree = "<group>"; };
+		BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dino_laser_icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +159,7 @@
 				BB30D31116650EE500ACAE1C /* Interface Builder */,
 				BB30D30F16650EC400ACAE1C /* 3rd Party */,
 				BBA9360F165AFAAB00567BD0 /* Supporting Files */,
+				BBC77FFA1667D0FF002ED051 /* Resources */,
 			);
 			path = DinoLasers;
 			sourceTree = "<group>";
@@ -167,10 +172,19 @@
 				BBA93614165AFAAB00567BD0 /* main.m */,
 				BBA93616165AFAAB00567BD0 /* DinoLasers-Prefix.pch */,
 				BBA9361A165AFAAB00567BD0 /* Default.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BBC77FFA1667D0FF002ED051 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */,
+				BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */,
 				BBA9361C165AFAAB00567BD0 /* Default@2x.png */,
 				BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */,
 			);
-			name = "Supporting Files";
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -230,6 +244,8 @@
 				BBA9361F165AFAAB00567BD0 /* Default-568h@2x.png in Resources */,
 				BBA93628165AFAAB00567BD0 /* MainViewController.xib in Resources */,
 				BBA9362B165AFAAB00567BD0 /* FlipsideViewController.xib in Resources */,
+				BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */,
+				BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
