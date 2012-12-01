@@ -9,8 +9,15 @@ public static final int MOTION_EVENT_BUFFER_SIZE = 50;
 
 float maxAccel, maxRotation = 0;
 
+// Reading from a file
+boolean readLogFile = true;
+int timerInterval = 50; // in milliseconds
+int timerIntervalStart = 0;
+String[] logMessages;
+int currLogMessage = 0;
+
 void setup() {
- size(480,800);
+ size(700,800);
  
  background(0);
  smooth();
@@ -19,9 +26,19 @@ void setup() {
   // and wait for incoming message
   udp = new UDP( this, 10552 ); 
   udp.log( true );        // <-- printout the connection activity
-  udp.listen( true );
+  if (!readLogFile) {
+      udp.listen( true );      
+  }
   
   motionList = new ArrayList<MotionEvent>();
+  
+  if (readLogFile) {
+      
+      logMessages = loadStrings("hand_wave.csv");
+      
+      timerIntervalStart = millis();      
+  }
+
 }
 
 int boxSize = 100;
@@ -37,6 +54,24 @@ void draw() {
     fill(128);
     rect(x, height - boxSize, boxSize, boxSize);
     x++;
+    
+    
+    if (readLogFile) {
+        if (millis() > timerIntervalStart + timerInterval) {
+            
+            if (logMessages.length > 0) {                
+                if (currLogMessage >= logMessages.length) {
+                    currLogMessage = 0;
+                }
+                
+                processMotionEventMessage(logMessages[currLogMessage]);
+                
+                currLogMessage++;
+            }             
+            
+            timerIntervalStart = millis();
+        }
+    }
     
     
     int plotStartX = width - 50; 
@@ -86,73 +121,64 @@ void draw() {
         currPlotX = plotStartX;        
     }    
 }
+
+
+void processMotionEventMessage(String message) {
+    
+    String[] parts = split(message, ",");
+    if (parts.length >= 8) {  
+        MotionEvent motionEvent = new MotionEvent();  
+
+        motionEvent.timestamp = Double.parseDouble(parts[0]);
+        motionEvent.accelX = Float.parseFloat(parts[1]);
+        motionEvent.accelY = Float.parseFloat(parts[2]);
+        motionEvent.accelZ = Float.parseFloat(parts[3]);
+        motionEvent.rotationX = Float.parseFloat(parts[4]);
+        motionEvent.rotationY = Float.parseFloat(parts[5]);
+        motionEvent.rotationZ = Float.parseFloat(parts[6]);
+        motionEvent.marker = parts[7];
+
+
+        // kinda dirty code to calculate max
+        if (motionEvent.accelX > maxAccel) {
+            maxAccel = motionEvent.accelX;
+        }
+        if (motionEvent.accelY > maxAccel) {
+            maxAccel = motionEvent.accelY;
+        }      
+        if (motionEvent.accelZ > maxAccel) {
+            maxAccel = motionEvent.accelZ;
+        }
+        if (motionEvent.rotationX > maxRotation) {
+            maxRotation = motionEvent.rotationX;
+        }
+        if (motionEvent.rotationY > maxRotation) {
+            maxRotation = motionEvent.rotationY;
+        }
+        if (motionEvent.rotationZ > maxRotation) {
+            maxRotation = motionEvent.rotationZ;
+        }
+
+
+
+        motionList.add(motionEvent);
+
+        if (motionList.size() > MOTION_EVENT_BUFFER_SIZE) {
+            motionList.subList(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE).clear();
+            //motionList.removeRange(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE);
+        }
+
+        println("motionList size: " + motionList.size() + " MaxAccel: " + maxAccel + " MaxRotation: " + maxRotation);
+    }
+}
  
-// void receive( byte[] data ) {            // <-- default handler
+// UDP Handler
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
    
-   
-  // get the "real" message =
   String message = new String( data );
+
+  processMotionEventMessage(message);
   
-  String[] parts = split(message, ",");
-  if (parts.length >= 8) {  
-      MotionEvent motionEvent = new MotionEvent();  
-      
-      motionEvent.timestamp = Double.parseDouble(parts[0]);
-      motionEvent.accelX = Float.parseFloat(parts[1]);
-      motionEvent.accelY = Float.parseFloat(parts[2]);
-      motionEvent.accelZ = Float.parseFloat(parts[3]);
-      motionEvent.rotationX = Float.parseFloat(parts[4]);
-      motionEvent.rotationY = Float.parseFloat(parts[5]);
-      motionEvent.rotationZ = Float.parseFloat(parts[6]);
-      motionEvent.marker = parts[7];
-      
-      if (motionEvent.accelX > maxAccel) {
-          maxAccel = motionEvent.accelX;
-      }
-      if (motionEvent.accelY > maxAccel) {
-          maxAccel = motionEvent.accelY;
-      }      
-      if (motionEvent.accelZ > maxAccel) {
-          maxAccel = motionEvent.accelZ;
-      }
-      if (motionEvent.rotationX > maxRotation) {
-          maxRotation = motionEvent.rotationX;
-      }
-      if (motionEvent.rotationY > maxRotation) {
-          maxRotation = motionEvent.rotationY;
-      }
-      if (motionEvent.rotationZ > maxRotation) {
-          maxRotation = motionEvent.rotationZ;
-      }
-      
-      
-      
-      motionList.add(motionEvent);
-      
-      if (motionList.size() > MOTION_EVENT_BUFFER_SIZE) {
-          motionList.subList(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE).clear();
-          //motionList.removeRange(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE);
-      }
-            
-      println("motionList size: " + motionList.size() + " MaxAccel: " + maxAccel + " MaxRotation: " + maxRotation);
-  }
-  
-  
-  /*
-  String[] parts = split(message, "&");
-  
-  int sentX = int(parts[0]);
-  int sentY = int(parts[1]);    //"24" -> 24
-   
-   
-  line(width-sentX , sentY , random(0, 480), 0);
-  stroke (random(0, 150));
- 
-   
-  // print the result
-  println( "receive: x = \""+sentX+"\" y = \""+sentY+"\"");
-  */
 }
 
 
