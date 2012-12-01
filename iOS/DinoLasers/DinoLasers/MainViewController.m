@@ -12,57 +12,55 @@
 #import "GCDAsyncUdpSocket.h"
 #import "UDPConnection.h"
 #import "LogConnection.h"
+#import "MotionController.h"
+#import "DinoLaserSettings.h"
 
-#define UPDATE_INTERVAL 1.0/60.0
+#define LOG_BUFFER_SIZE 300
 
-@interface MainViewController () {
-    
-}
 
-@property (nonatomic, strong) CMMotionManager *motionManager;
-@property (nonatomic, strong) CMAttitude *referenceAttitude;
-@property (nonatomic, strong) NSString *markerString;
+@interface MainViewController ()
+
+@property (nonatomic, strong) MotionController *motionController;
 @property (nonatomic, strong) UDPConnection *udpConnection;
 @property (nonatomic, strong) LogConnection *logConnection;
 @property (nonatomic, assign) BOOL isRecording;
 @property (nonatomic, strong) NSString *logString;
-@property (nonatomic, assign) long tag;
 @property (nonatomic, strong) NSTimer *timer;
-
-- (NSString *)currentMotionString;
+@property (nonatomic, assign) long tag;
 
 @end
 
+
+
 @implementation MainViewController
 @synthesize markerStringTextField;
-@synthesize motionManager;
-@synthesize referenceAttitude;
-@synthesize markerString;
 @synthesize udpConnection;
 @synthesize logConnection;
 @synthesize isRecording;
 @synthesize logString;
-@synthesize tag;
 @synthesize timer;
-
+@synthesize tag;
 
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.isRecording = NO;
+    self.tag = 001;
     
-    [self enableMotionTracking];
+    // instantiate MotionController and enable motion tracking
+    self.motionController = [[MotionController alloc] init];
+    [self.motionController enableMotionTracking];
     
+    // Open whatever persistence connections are enabled in settings
     [self updatePersistenceConnections];
     
     // begin timer
-    double timeInterval = UPDATE_INTERVAL;
+    double timeInterval = DEFAULT_UPDATE_INTERVAL;
     self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
     
     
     // Make view adjustments
-    // ...    
     [self updateToggleRecordingButton];
     
     self.logString = @"";
@@ -72,34 +70,26 @@
     
 }
 
-- (void)updateToggleRecordingButton {
-    NSString *text = isRecording ? @"Pause" : @"Play";
-    
-    [self.toggleLoggingButton setTitle:text forState:UIControlStateNormal];
-}
-
-// Timer callback
--(void)timerFired:(NSTimer *)theTimer {
-    if (isRecording) {
-        [self processMotionData];
-    }
-}
-
 
 - (void)updatePersistenceConnections {
     PersistenceMode currPersistenceMode = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
-    
-    if (currPersistenceMode == PersistenceModeNone) {
-        currPersistenceMode = PersistenceModeUDP | PersistenceModeLogFile;
-    }
-    
+        
     // setup UDPConnection if enabled
     if (currPersistenceMode & PersistenceModeUDP) {
         if (!self.udpConnection) {
             self.udpConnection = [[UDPConnection alloc] init];
-            self.udpConnection.socketHost = @"10.0.1.19";
-            [self.udpConnection setupSocket];
         }
+        
+        NSString *hostIP = [[NSUserDefaults standardUserDefaults] objectForKey:HOST_IP_KEY];
+        if (hostIP) {
+            self.udpConnection.socketHost = hostIP;
+        }
+        
+        [self.udpConnection setupSocket];
+    } else {
+        // kill existing udpConnection if it exists
+        [self.udpConnection close];
+        self.udpConnection = nil;
     }
     
     // setup LogConnection if enabled
@@ -107,21 +97,10 @@
         if (!self.logConnection) {
             self.logConnection = [[LogConnection alloc] init];
         }
+    } else {
+        // kill existing log connection if it exists
+        self.logConnection = nil;
     }
-}
-
-#define LOG_BUFFER_SIZE 300
-
-- (void)appendToLog:(NSString *)suffix {
-    logString = [logString stringByAppendingString:suffix];
-    if (logString.length >= LOG_BUFFER_SIZE) {
-        logString = [logString substringFromIndex:logString.length - LOG_BUFFER_SIZE];
-    }
-    
-    self.logTextView.text = logString;
-    
-    NSRange range = NSMakeRange(self.logTextView.text.length - 1, 1);
-    [self.logTextView scrollRangeToVisible:range];
 }
 
 
@@ -136,7 +115,21 @@
 }
 
 - (IBAction)showInfo:(id)sender {
-    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideViewController" bundle:nil];
+    
+    DinoLaserSettings *settings = [DinoLaserSettings new];
+    settings.persistenceModes = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
+    
+    NSString *ip = [[NSUserDefaults standardUserDefaults] objectForKey:HOST_IP_KEY];
+    if (!ip) {
+        ip = DEFAULT_HOST;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:ip forKey:HOST_IP_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    settings.hostIP = ip;
+    
+    
+    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithDinoLaserSettings:settings];
     controller.delegate = self;
     controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:controller animated:YES completion:nil];
@@ -144,19 +137,26 @@
 
 - (IBAction)markString:(id)sender {
     if ([self.markerStringTextField.text isEqualToString:@""]) {
-        self.markerString = nil;
+        self.motionController.markerString = nil;
     } else {
-        self. markerString = self.markerStringTextField.text;
+        self.motionController.markerString = self.markerStringTextField.text;
     }
-    NSLog(@"Updated Marker String to: %@", markerString);
+    NSLog(@"Updated Marker String to: %@", self.motionController.markerString);
     [self.markerStringTextField resignFirstResponder];
 }
 
 
-#pragma mark - CoreMotion
+#pragma mark - Timer & Data Processing
+
+// Timer callback
+-(void)timerFired:(NSTimer *)theTimer {
+    if (isRecording) {
+        [self processMotionData];
+    }
+}
 
 - (void)processMotionData {
-    NSString *motionString = [self currentMotionString];
+    NSString *motionString = [self.motionController currentMotionString];
     
     NSLog(@"motionString: %@", motionString);
     [self appendToLog:motionString];
@@ -172,50 +172,45 @@
 }
 
 
--(void) enableMotionTracking {
-    self.tag = 001;
-    
-    self.motionManager = [[CMMotionManager alloc] init];
-    
-    self.motionManager.deviceMotionUpdateInterval = UPDATE_INTERVAL;
-    self.motionManager.accelerometerUpdateInterval = UPDATE_INTERVAL;
-    self.motionManager.gyroUpdateInterval = UPDATE_INTERVAL;
-    
-    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-    
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-    self.referenceAttitude = deviceMotion.attitude;
-    
-    [motionManager startGyroUpdates];
-    [motionManager startAccelerometerUpdates];
-}
-
-/**
- *  Motion string with the current acceleration and rotation values. 
- *  Format: "timestamp, accelX, accelY, accelZ, rotationX, rotationY, rotationZ, markerString"
- *
- *  timestamp:      milliseconds
- *  accel vals:     doubles
- *  rotation vals:  doubles
- *  markerString:   used to mark a sequence of values
- */
-- (NSString *)currentMotionString {
-    CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
-    
-    CMAcceleration acceleration = deviceMotion.userAcceleration;
-    CMRotationRate rotationRate = deviceMotion.rotationRate;
-    
-    double millis = CACurrentMediaTime();
-    
-    NSString *motionString = [NSString stringWithFormat:@"%f,%f,%f,%f,%f,%f,%f,%@", millis, acceleration.x, acceleration.y, acceleration.z, rotationRate.x, rotationRate.y, rotationRate.z, self.markerString];
-    
-    return motionString;
-}
-
-#pragma mark - Flipside View
+#pragma mark - FlipsideViewDelegate
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)flipsideViewController:(FlipsideViewController *)controller didUpdateSettings:(DinoLaserSettings *)settings {
+    
+    // Save new settings info in defaults
+    [[NSUserDefaults standardUserDefaults] setInteger:settings.persistenceModes forKey:PERSISTENCE_MODES_SETTINGS_KEY];
+    if (settings.hostIP) {
+        [[NSUserDefaults standardUserDefaults] setObject:settings.hostIP forKey:HOST_IP_KEY];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    // update the persistent connections with the changes
+    [self updatePersistenceConnections];
+}
+
+#pragma mark - Scrolling OnScreen Log 
+
+- (void)appendToLog:(NSString *)suffix {
+    logString = [logString stringByAppendingString:suffix];
+    if (logString.length >= LOG_BUFFER_SIZE) {
+        logString = [logString substringFromIndex:logString.length - LOG_BUFFER_SIZE];
+    }
+    
+    self.logTextView.text = logString;
+    
+    NSRange range = NSMakeRange(self.logTextView.text.length - 1, 1);
+    [self.logTextView scrollRangeToVisible:range];
+}
+
+
+#pragma mark - Misc View setup
+
+- (void)updateToggleRecordingButton {
+    NSString *text = isRecording ? @"Pause" : @"Play";
+    [self.toggleLoggingButton setTitle:text forState:UIControlStateNormal];
 }
 
 @end

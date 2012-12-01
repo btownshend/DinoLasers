@@ -9,6 +9,7 @@
 #ifndef DinoLasers_CommonTypes_h
 #define DinoLasers_CommonTypes_h
 
+#define HOST_IP_KEY @"HostIP"
 #define PERSISTENCE_MODES_SETTINGS_KEY @"PersistenceModesSettingsKey"
 
 typedef enum PersistenceMode {

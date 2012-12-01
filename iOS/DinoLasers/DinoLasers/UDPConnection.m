@@ -8,10 +8,6 @@
 
 #import "UDPConnection.h"
 
-#define DEFAULT_HOST_PORT 10552
-#define DEFAULT_LOCAL_PORT 0
-#define DEFAULT_HOST @"localhost"
-
 
 @interface UDPConnection () {
 
@@ -43,10 +39,9 @@
     return self;
 }
 
-
 - (void)setupSocket {
 
-	udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.queue];
+	self.udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:self.queue];
 	
 	NSError *error = nil;
 	
@@ -59,6 +54,10 @@
 		NSLog(@"Error receiving: %@", error);
 		return;
 	}    
+}
+
+- (void)close {
+    [self.udpSocket close];
 }
 
 #pragma mark - Sending data

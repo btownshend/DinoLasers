@@ -31,6 +31,9 @@
 		BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */; };
 		BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */; };
 		BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */; };
+		BBD1FC3E1669A3EB00B785D9 /* MotionController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD1FC3D1669A3EB00B785D9 /* MotionController.m */; };
+		BBD1FC421669A91600B785D9 /* DinoLaserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */; };
+		BBD1FC441669B29100B785D9 /* img_reload.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC431669B29100B785D9 /* img_reload.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +72,11 @@
 		BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dino_laser_icon.png; sourceTree = "<group>"; };
 		BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dino_laser_icon@2x.png"; sourceTree = "<group>"; };
+		BBD1FC3C1669A3EB00B785D9 /* MotionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MotionController.h; sourceTree = "<group>"; };
+		BBD1FC3D1669A3EB00B785D9 /* MotionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionController.m; sourceTree = "<group>"; };
+		BBD1FC401669A91600B785D9 /* DinoLaserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DinoLaserSettings.h; sourceTree = "<group>"; };
+		BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DinoLaserSettings.m; sourceTree = "<group>"; };
+		BBD1FC431669B29100B785D9 /* img_reload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_reload.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,11 +159,15 @@
 				BBA93621165AFAAB00567BD0 /* MainViewController.m */,
 				BBA93623165AFAAB00567BD0 /* FlipsideViewController.h */,
 				BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */,
+				BBD1FC3C1669A3EB00B785D9 /* MotionController.h */,
+				BBD1FC3D1669A3EB00B785D9 /* MotionController.m */,
 				BB30D31216650F7D00ACAE1C /* UDPConnection.h */,
 				BB30D31316650F7D00ACAE1C /* UDPConnection.m */,
 				BB30D31C1665278B00ACAE1C /* LogConnection.h */,
 				BB30D31D1665278B00ACAE1C /* LogConnection.m */,
 				BB30D31F1665334200ACAE1C /* CommonTypes.h */,
+				BBD1FC401669A91600B785D9 /* DinoLaserSettings.h */,
+				BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */,
 				BB30D31116650EE500ACAE1C /* Interface Builder */,
 				BB30D30F16650EC400ACAE1C /* 3rd Party */,
 				BBA9360F165AFAAB00567BD0 /* Supporting Files */,
@@ -183,6 +195,7 @@
 				BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */,
 				BBA9361C165AFAAB00567BD0 /* Default@2x.png */,
 				BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */,
+				BBD1FC431669B29100B785D9 /* img_reload.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -246,6 +259,7 @@
 				BBA9362B165AFAAB00567BD0 /* FlipsideViewController.xib in Resources */,
 				BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */,
 				BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */,
+				BBD1FC441669B29100B785D9 /* img_reload.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +278,8 @@
 				BBA93636165AFAE700567BD0 /* GCDAsyncUdpSocket.m in Sources */,
 				BB30D31416650F7D00ACAE1C /* UDPConnection.m in Sources */,
 				BB30D31E1665278B00ACAE1C /* LogConnection.m in Sources */,
+				BBD1FC3E1669A3EB00B785D9 /* MotionController.m in Sources */,
+				BBD1FC421669A91600B785D9 /* DinoLaserSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

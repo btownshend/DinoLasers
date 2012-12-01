@@ -14,7 +14,6 @@
 
 @property (strong, nonatomic) IBOutlet UIButton *toggleLoggingButton;
 @property (nonatomic, strong) IBOutlet UITextField *markerStringTextField;
-
 @property (strong, nonatomic) IBOutlet UITextView *logTextView;
 
 

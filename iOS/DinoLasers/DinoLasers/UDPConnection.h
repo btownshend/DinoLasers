@@ -10,6 +10,10 @@
 #import <Foundation/Foundation.h>
 #import "GCDAsyncUdpSocket.h"
 
+#define DEFAULT_HOST_PORT 10552
+#define DEFAULT_LOCAL_PORT 0
+#define DEFAULT_HOST @"localhost"
+
 @interface UDPConnection : NSObject
 
 @property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
@@ -21,6 +25,8 @@
  *  Will instantiate the socket with the current host and port values
  */
 - (void)setupSocket;
+
+- (void)close;
 
 - (void)sendData:(NSData *)data toHost:(NSString *)host port:(int)port withTimeout:(int)timeout tag:(long)tag;
 
