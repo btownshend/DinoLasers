@@ -45,10 +45,13 @@
     self.motionManager.accelerometerUpdateInterval = self.updateInterval;
     self.motionManager.gyroUpdateInterval = self.updateInterval;
     
+    [self.motionManager startDeviceMotionUpdates];
+    
     [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
     
+    
     // capture the reference attitude as the initial position
-    [self saveReferenceAttitude];
+    //[self saveReferenceAttitude];
 
 }
 
@@ -62,6 +65,11 @@
  *  markerString:   used to mark a sequence of values
  */
 - (NSString *)currentMotionString {
+    
+    if (!self.motionManager.deviceMotionActive) {
+        NSLog(@"Device motion not active");
+    }
+    
     CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
     
     CMAcceleration acceleration = deviceMotion.userAcceleration;
