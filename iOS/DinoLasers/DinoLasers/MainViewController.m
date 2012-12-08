@@ -143,6 +143,18 @@
     }
     NSLog(@"Updated Marker String to: %@", self.motionController.markerString);
     [self.markerStringTextField resignFirstResponder];
+    
+    // start a new logconnection file
+    self.logConnection.fileNamePrefix = self.motionController.markerString;
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Start new log file?" message:nil delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil, nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self.logConnection beginNewFile];
+    }
 }
 
 
