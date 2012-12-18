@@ -23,6 +23,7 @@
 @synthesize hostPort;
 @synthesize localPort;
 @synthesize queue=_queue;
+@synthesize delegate;
 
 - (id)init {
     if ((self = [super init])) {
@@ -83,9 +84,17 @@
 
 - (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data fromAddress:(NSData *)address withFilterContext:(id)filterContext {
     
+    NSString *host = nil;
+    uint16_t port = 0;
+    [GCDAsyncUdpSocket getHost:&host port:&port fromAddress:address];
+    
 	NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 	if (msg) {
-		NSLog(@"RECV: %@", msg);        
+        if (delegate) {
+            [self.delegate UDPConnection:self.delegate didReceiveMessage:msg fromHost:host onPort:port];
+        } else {
+            NSLog(@"RECV: %@", msg);
+        }
 	} else {
 		NSString *host = nil;
 		uint16_t port = 0;

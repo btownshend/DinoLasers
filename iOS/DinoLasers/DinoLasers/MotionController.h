@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#define DEFAULT_UPDATE_INTERVAL 1.0/100.0
+#define DEFAULT_UPDATE_INTERVAL 1.0 / 3.0 //1.0/100.0
 
 
 @interface MotionController : NSObject

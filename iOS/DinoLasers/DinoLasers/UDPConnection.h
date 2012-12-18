@@ -14,12 +14,21 @@
 #define DEFAULT_LOCAL_PORT 0
 #define DEFAULT_HOST @"localhost"
 
+@class UDPConnection;
+
+@protocol UDPConnectionDelegate <NSObject>
+
+- (void)UDPConnection:(UDPConnection *)theUDPConnection didReceiveMessage:(NSString *)message fromHost:(NSString *)theHost onPort:(int)thePort;
+
+@end
+
 @interface UDPConnection : NSObject
 
 @property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
 @property (nonatomic, strong) NSString *socketHost;
 @property (nonatomic, assign) int hostPort;
 @property (nonatomic, assign) int localPort;
+@property (nonatomic, assign) id <UDPConnectionDelegate> delegate;
 
 /**
  *  Will instantiate the socket with the current host and port values

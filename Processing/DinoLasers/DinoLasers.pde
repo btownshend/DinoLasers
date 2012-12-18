@@ -4,6 +4,12 @@ import java.util.ArrayList.*;
 UDP udp;  // define the UDP object (sets up)
 
 ArrayList <MotionEvent> motionList;
+MotionEvent lowPassReference;
+float lowPassAlpha = 0.100000000;
+float lowPassAlphaMin = 0.1;
+float lowPassAlphaMax = 1.0;
+float lowPassAlphaIncrement = 0.100000000;
+
 
 public static final int MOTION_EVENT_BUFFER_SIZE = 50;
 
@@ -17,14 +23,14 @@ String[] logMessages;
 int currLogMessage = 0;
 
 void setup() {
- size(700,800);
+ size(700,900);
  
  background(0);
  smooth();
  
   // create a new datagram connection on port 6000
   // and wait for incoming message
-  udp = new UDP( this, 10552 ); 
+  udp = new UDP( this, 10552); 
   udp.log( true );        // <-- printout the connection activity
   if (!readLogFile) {
       udp.listen( true );      
@@ -73,8 +79,16 @@ void draw() {
         }
     }
     
+    drawMotionPlots();
     
-    int plotStartX = width - 50; 
+    // add some info about current vals
+    stroke(255);
+    text("low-pass alpha:  " + lowPassAlpha, 40, height - 50);
+}
+
+void drawMotionPlots() {
+    int plotPaddingX = 50;
+    int plotStartX = width - plotPaddingX; 
     
     int singlePlotWidth = width - 100;
     int singlePlotHeight = 100;        
@@ -83,25 +97,45 @@ void draw() {
     int currPlotX = plotStartX;
     int plotStartY = 120;
     int plotPaddingY = 10;
-    
-    stroke(0,0,255);
 
     // draw line plots
     for (int i = 0; i < 6; i++) {
+        
+        noStroke();
+        fill(100);
+        rect(0 + plotPaddingX, plotStartY, width - plotPaddingX * 2, singlePlotHeight);
+
+        switch(i) {
+            case 0:
+            case 3:
+                stroke(255, 0, 0);
+                break;
+            case 1:
+            case 4:
+                stroke(0, 255, 0);
+                break;
+            case 2:
+            case 5:
+                stroke(0, 0, 255);
+                break;
+        }
         
         if (motionList.size() > 1) { // make sure we have at least two values
             
             int midPoint = plotStartY + (singlePlotHeight / 2);
             
             // create scale factor so we hopefully use the majority of the plotheight
-            float scaleFactor = 0;
+            float scaleFactor = 1.0;
             if (i < 3) { // use max accel
-                scaleFactor = singlePlotHeight / maxAccel;
+                scaleFactor = (singlePlotHeight / 2) / maxAccel;
             } else { // use max rotation
-                scaleFactor = singlePlotHeight / maxRotation;
-            }            
+                scaleFactor = (singlePlotHeight / 2) / maxRotation;
+            }   
+            
+            //println("scaleFactor: " + scaleFactor);
                         
             for (int j = motionList.size() - 1; j > 0; j--) {
+                
                 MotionEvent current = motionList.get(j);                                
                 MotionEvent next = motionList.get(j - 1);
                 int nextX = currPlotX - singleEventWidth;
@@ -119,9 +153,8 @@ void draw() {
         
         plotStartY += singlePlotHeight + plotPaddingY;
         currPlotX = plotStartX;        
-    }    
+    }
 }
-
 
 void processMotionEventMessage(String message) {
     
@@ -138,37 +171,38 @@ void processMotionEventMessage(String message) {
         motionEvent.rotationZ = Float.parseFloat(parts[6]);
         motionEvent.marker = parts[7];
 
-
-        // kinda dirty code to calculate max
-        if (motionEvent.accelX > maxAccel) {
-            maxAccel = motionEvent.accelX;
-        }
-        if (motionEvent.accelY > maxAccel) {
-            maxAccel = motionEvent.accelY;
-        }      
-        if (motionEvent.accelZ > maxAccel) {
-            maxAccel = motionEvent.accelZ;
-        }
-        if (motionEvent.rotationX > maxRotation) {
-            maxRotation = motionEvent.rotationX;
-        }
-        if (motionEvent.rotationY > maxRotation) {
-            maxRotation = motionEvent.rotationY;
-        }
-        if (motionEvent.rotationZ > maxRotation) {
-            maxRotation = motionEvent.rotationZ;
-        }
-
-
-
-        motionList.add(motionEvent);
+        lowPassReference = MotionEvent.lowPassResult(motionEvent, lowPassReference, lowPassAlpha);
+        
+        
+        adjustMinMaxVals(lowPassReference);
+        motionList.add(lowPassReference);
 
         if (motionList.size() > MOTION_EVENT_BUFFER_SIZE) {
             motionList.subList(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE).clear();
-            //motionList.removeRange(0, motionList.size() - MOTION_EVENT_BUFFER_SIZE);
         }
+        //println("motionList size: " + motionList.size() + " MaxAccel: " + maxAccel + " MaxRotation: " + maxRotation);
+    }
+}
 
-        println("motionList size: " + motionList.size() + " MaxAccel: " + maxAccel + " MaxRotation: " + maxRotation);
+void adjustMinMaxVals(MotionEvent motionEvent) {
+    // kinda dirty code to calculate max (doesn't ever bring range back down to match current motionList)
+    if (abs(motionEvent.accelX) > maxAccel) {
+        maxAccel = abs(motionEvent.accelX);
+    }
+    if (abs(motionEvent.accelY) > maxAccel) {
+        maxAccel = abs(motionEvent.accelY);
+    }      
+    if (abs(motionEvent.accelZ) > maxAccel) {
+        maxAccel = abs(motionEvent.accelZ);
+    }
+    if (abs(motionEvent.rotationX) > maxRotation) {
+        maxRotation = abs(motionEvent.rotationX);
+    }
+    if (abs(motionEvent.rotationY) > maxRotation) {
+        maxRotation = abs(motionEvent.rotationY);
+    }
+    if (abs(motionEvent.rotationZ) > maxRotation) {
+        maxRotation = abs(motionEvent.rotationZ);
     }
 }
  
@@ -176,15 +210,26 @@ void processMotionEventMessage(String message) {
 void receive( byte[] data, String ip, int port ) {  // <-- extended handler
    
   String message = new String( data );
-
+  println("message: " + message);
   processMotionEventMessage(message);
   
 }
 
-
+// Key Event Handler
 void keyPressed() {
-    String statusString = udp.isClosed() ? "Closed" : "Open";
-    println("Socket is: " + statusString + " on " + udp.address());
+    
+    if (key == 's') { // status
+        String statusString = udp.isClosed() ? "Closed" : "Open";
+        println("Socket is: " + statusString + " on " + udp.address());        
+    } else if (key == ',' || key == '<') { // reduce lowPassAlpha
+        if (lowPassAlpha - lowPassAlphaIncrement >= lowPassAlphaMin ) {
+            lowPassAlpha -= lowPassAlphaIncrement;
+        } 
+    } else if (key == '.' || key == '>') { // increase lowPassAlpha) 
+        if (lowPassAlpha <= lowPassAlphaMax ) {
+            lowPassAlpha += lowPassAlphaIncrement;
+        }
+    }
 }
 
  
