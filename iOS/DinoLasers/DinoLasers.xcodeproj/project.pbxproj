@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BB30D31416650F7D00ACAE1C /* UDPConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB30D31316650F7D00ACAE1C /* UDPConnection.m */; };
+		BB30D31A166520FF00ACAE1C /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB30D319166520FF00ACAE1C /* QuartzCore.framework */; };
+		BB30D31E1665278B00ACAE1C /* LogConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB30D31D1665278B00ACAE1C /* LogConnection.m */; };
 		BBA93609165AFAAB00567BD0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93608165AFAAB00567BD0 /* UIKit.framework */; };
 		BBA9360B165AFAAB00567BD0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360A165AFAAB00567BD0 /* Foundation.framework */; };
 		BBA9360D165AFAAB00567BD0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9360C165AFAAB00567BD0 /* CoreGraphics.framework */; };
@@ -26,9 +29,20 @@
 		BBA9363A165B064C00567BD0 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA93639165B064B00567BD0 /* CFNetwork.framework */; };
 		BBA9363C165B0D4500567BD0 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363B165B0D4500567BD0 /* CoreMotion.framework */; };
 		BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */; };
+		BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */; };
+		BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */; };
+		BBD1FC3E1669A3EB00B785D9 /* MotionController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD1FC3D1669A3EB00B785D9 /* MotionController.m */; };
+		BBD1FC421669A91600B785D9 /* DinoLaserSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */; };
+		BBD1FC441669B29100B785D9 /* img_reload.png in Resources */ = {isa = PBXBuildFile; fileRef = BBD1FC431669B29100B785D9 /* img_reload.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BB30D31216650F7D00ACAE1C /* UDPConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UDPConnection.h; sourceTree = "<group>"; };
+		BB30D31316650F7D00ACAE1C /* UDPConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UDPConnection.m; sourceTree = "<group>"; };
+		BB30D319166520FF00ACAE1C /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		BB30D31C1665278B00ACAE1C /* LogConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LogConnection.h; sourceTree = "<group>"; };
+		BB30D31D1665278B00ACAE1C /* LogConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LogConnection.m; sourceTree = "<group>"; };
+		BB30D31F1665334200ACAE1C /* CommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTypes.h; sourceTree = "<group>"; };
 		BBA93604165AFAAB00567BD0 /* DinoLasers.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DinoLasers.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA93608165AFAAB00567BD0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BBA9360A165AFAAB00567BD0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -56,6 +70,13 @@
 		BBA93639165B064B00567BD0 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		BBA9363B165B0D4500567BD0 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dino_laser_icon.png; sourceTree = "<group>"; };
+		BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "dino_laser_icon@2x.png"; sourceTree = "<group>"; };
+		BBD1FC3C1669A3EB00B785D9 /* MotionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MotionController.h; sourceTree = "<group>"; };
+		BBD1FC3D1669A3EB00B785D9 /* MotionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionController.m; sourceTree = "<group>"; };
+		BBD1FC401669A91600B785D9 /* DinoLaserSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DinoLaserSettings.h; sourceTree = "<group>"; };
+		BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DinoLaserSettings.m; sourceTree = "<group>"; };
+		BBD1FC431669B29100B785D9 /* img_reload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = img_reload.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB30D31A166520FF00ACAE1C /* QuartzCore.framework in Frameworks */,
 				BBA9363E165B0D4C00567BD0 /* CoreLocation.framework in Frameworks */,
 				BBA9363C165B0D4500567BD0 /* CoreMotion.framework in Frameworks */,
 				BBA9363A165B064C00567BD0 /* CFNetwork.framework in Frameworks */,
@@ -76,9 +98,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BB30D30F16650EC400ACAE1C /* 3rd Party */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */,
+				BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */,
+				BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */,
+				BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */,
+			);
+			name = "3rd Party";
+			sourceTree = "<group>";
+		};
+		BB30D31116650EE500ACAE1C /* Interface Builder */ = {
+			isa = PBXGroup;
+			children = (
+				BBA93626165AFAAB00567BD0 /* MainViewController.xib */,
+				BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */,
+			);
+			name = "Interface Builder";
+			sourceTree = "<group>";
+		};
 		BBA935F9165AFAAB00567BD0 = {
 			isa = PBXGroup;
 			children = (
+				BB30D319166520FF00ACAE1C /* QuartzCore.framework */,
 				BBA9363D165B0D4C00567BD0 /* CoreLocation.framework */,
 				BBA9363B165B0D4500567BD0 /* CoreMotion.framework */,
 				BBA93639165B064B00567BD0 /* CFNetwork.framework */,
@@ -116,13 +159,19 @@
 				BBA93621165AFAAB00567BD0 /* MainViewController.m */,
 				BBA93623165AFAAB00567BD0 /* FlipsideViewController.h */,
 				BBA93624165AFAAB00567BD0 /* FlipsideViewController.m */,
-				BBA93626165AFAAB00567BD0 /* MainViewController.xib */,
-				BBA93629165AFAAB00567BD0 /* FlipsideViewController.xib */,
-				BBA93631165AFAE700567BD0 /* GCDAsyncSocket.h */,
-				BBA93632165AFAE700567BD0 /* GCDAsyncSocket.m */,
-				BBA93633165AFAE700567BD0 /* GCDAsyncUdpSocket.h */,
-				BBA93634165AFAE700567BD0 /* GCDAsyncUdpSocket.m */,
+				BBD1FC3C1669A3EB00B785D9 /* MotionController.h */,
+				BBD1FC3D1669A3EB00B785D9 /* MotionController.m */,
+				BB30D31216650F7D00ACAE1C /* UDPConnection.h */,
+				BB30D31316650F7D00ACAE1C /* UDPConnection.m */,
+				BB30D31C1665278B00ACAE1C /* LogConnection.h */,
+				BB30D31D1665278B00ACAE1C /* LogConnection.m */,
+				BB30D31F1665334200ACAE1C /* CommonTypes.h */,
+				BBD1FC401669A91600B785D9 /* DinoLaserSettings.h */,
+				BBD1FC411669A91600B785D9 /* DinoLaserSettings.m */,
+				BB30D31116650EE500ACAE1C /* Interface Builder */,
+				BB30D30F16650EC400ACAE1C /* 3rd Party */,
 				BBA9360F165AFAAB00567BD0 /* Supporting Files */,
+				BBC77FFA1667D0FF002ED051 /* Resources */,
 			);
 			path = DinoLasers;
 			sourceTree = "<group>";
@@ -135,10 +184,20 @@
 				BBA93614165AFAAB00567BD0 /* main.m */,
 				BBA93616165AFAAB00567BD0 /* DinoLasers-Prefix.pch */,
 				BBA9361A165AFAAB00567BD0 /* Default.png */,
-				BBA9361C165AFAAB00567BD0 /* Default@2x.png */,
-				BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BBC77FFA1667D0FF002ED051 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BBD1FC321667DD9400B785D9 /* dino_laser_icon.png */,
+				BBD1FC331667DD9400B785D9 /* dino_laser_icon@2x.png */,
+				BBA9361C165AFAAB00567BD0 /* Default@2x.png */,
+				BBA9361E165AFAAB00567BD0 /* Default-568h@2x.png */,
+				BBD1FC431669B29100B785D9 /* img_reload.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -198,6 +257,9 @@
 				BBA9361F165AFAAB00567BD0 /* Default-568h@2x.png in Resources */,
 				BBA93628165AFAAB00567BD0 /* MainViewController.xib in Resources */,
 				BBA9362B165AFAAB00567BD0 /* FlipsideViewController.xib in Resources */,
+				BBD1FC341667DD9400B785D9 /* dino_laser_icon.png in Resources */,
+				BBD1FC351667DD9400B785D9 /* dino_laser_icon@2x.png in Resources */,
+				BBD1FC441669B29100B785D9 /* img_reload.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,6 +276,10 @@
 				BBA93625165AFAAB00567BD0 /* FlipsideViewController.m in Sources */,
 				BBA93635165AFAE700567BD0 /* GCDAsyncSocket.m in Sources */,
 				BBA93636165AFAE700567BD0 /* GCDAsyncUdpSocket.m in Sources */,
+				BB30D31416650F7D00ACAE1C /* UDPConnection.m in Sources */,
+				BB30D31E1665278B00ACAE1C /* LogConnection.m in Sources */,
+				BBD1FC3E1669A3EB00B785D9 /* MotionController.m in Sources */,
+				BBD1FC421669A91600B785D9 /* DinoLaserSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

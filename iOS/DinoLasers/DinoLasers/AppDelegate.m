@@ -50,4 +50,15 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+- (NSString *)applicationDocumentsDirectory {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *documentsDirectory = nil;
+    
+    if (paths && paths.count > 0) {
+        documentsDirectory = [paths objectAtIndex:0];
+    }
+    return documentsDirectory;
+}
+
 @end

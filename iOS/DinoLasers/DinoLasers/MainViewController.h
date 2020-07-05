@@ -8,14 +8,13 @@
 
 #import "FlipsideViewController.h"
 
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate> {
-    UIButton *sendButton;
+@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UIAlertViewDelegate> {
+
 }
 
-@property (nonatomic, strong) IBOutlet UIButton *sendButton;
+@property (strong, nonatomic) IBOutlet UIButton *toggleLoggingButton;
+@property (nonatomic, strong) IBOutlet UITextField *markerStringTextField;
+@property (strong, nonatomic) IBOutlet UITextView *logTextView;
 
-- (IBAction)showInfo:(id)sender;
-
-- (IBAction)send:(id)sender;
 
 @end

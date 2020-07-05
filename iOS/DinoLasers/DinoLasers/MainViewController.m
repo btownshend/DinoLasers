@@ -7,155 +7,222 @@
 //
 
 #import <CoreMotion/CoreMotion.h>
+#import <QuartzCore/QuartzCore.h>
 #import "MainViewController.h"
 #import "GCDAsyncUdpSocket.h"
+#import "UDPConnection.h"
+#import "LogConnection.h"
+#import "MotionController.h"
+#import "DinoLaserSettings.h"
 
-@interface MainViewController () {
-    
-}
+#define LOG_BUFFER_SIZE 300
 
-@property (nonatomic, strong) GCDAsyncUdpSocket *udpSocket;
-@property (nonatomic, strong) NSString *socketHost;
-@property (nonatomic, assign) int socketPort;
-@property (nonatomic, strong) CMMotionManager *motionManager;
-@property (nonatomic, strong) CMAttitude *referenceAttitude;
+
+@interface MainViewController ()
+
+@property (nonatomic, strong) MotionController *motionController;
+@property (nonatomic, strong) UDPConnection *udpConnection;
+@property (nonatomic, strong) LogConnection *logConnection;
+@property (nonatomic, assign) BOOL isRecording;
+@property (nonatomic, strong) NSString *logString;
+@property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, assign) long tag;
 
 @end
 
+
+
 @implementation MainViewController
-@synthesize udpSocket;
-@synthesize socketHost;
-@synthesize socketPort;
-@synthesize sendButton;
-@synthesize motionManager;
-@synthesize referenceAttitude;
-
-- (void)setupSocket
-{
-	// Setup our socket.
-	// The socket will invoke our delegate methods using the usual delegate paradigm.
-	// However, it will invoke the delegate methods on a specified GCD delegate dispatch queue.
-	//
-	// Now we can configure the delegate dispatch queues however we want.
-	// We could simply use the main dispatc queue, so the delegate methods are invoked on the main thread.
-	// Or we could use a dedicated dispatch queue, which could be helpful if we were doing a lot of processing.
-	//
-	// The best approach for your application will depend upon convenience, requirements and performance.
-	//
-	// For this simple example, we're just going to use the main thread.
-	
-	udpSocket = [[GCDAsyncUdpSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-	
-	NSError *error = nil;
-	
-	if (![udpSocket bindToPort:0 error:&error])
-	{
-		//[self logError:FORMAT(@"Error binding: %@", error)];
-		return;
-	}
-	if (![udpSocket beginReceiving:&error])
-	{
-		//[self logError:FORMAT(@"Error receiving: %@", error)];
-		return;
-	}
-    
-    self.socketHost = @"localhost";
-    self.socketPort = 10552;
-    
-}
-
--(void) enableMotionTracking {
-    self.motionManager = [[CMMotionManager alloc] init];
-    self.motionManager.deviceMotionUpdateInterval = 1.0 / 60.0;
-    
-    [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXTrueNorthZVertical];
-    
-    CMDeviceMotion *deviceMotion = motionManager.deviceMotion;
-    self.referenceAttitude = deviceMotion.attitude;
-    
-    [motionManager startGyroUpdates];
-    [motionManager startAccelerometerUpdates];
-}
+@synthesize markerStringTextField;
+@synthesize udpConnection;
+@synthesize logConnection;
+@synthesize isRecording;
+@synthesize logString;
+@synthesize timer;
+@synthesize tag;
 
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-
-    [self setupSocket];
-    [self enableMotionTracking];
+    
+    self.isRecording = NO;
+    self.tag = 001;
+    
+    // instantiate MotionController and enable motion tracking
+    self.motionController = [[MotionController alloc] init];
+    [self.motionController enableMotionTracking];
+    
+    // Open whatever persistence connections are enabled in settings
+    [self updatePersistenceConnections];
+    
+    // begin timer
+    double timeInterval = DEFAULT_UPDATE_INTERVAL;
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:timeInterval target:self selector:@selector(timerFired:) userInfo:nil repeats:YES];
+    
+    
+    // Make view adjustments
+    [self updateToggleRecordingButton];
+    
+    self.logString = @"";
+    self.logTextView.text = nil;
+    self.logTextView.layer.cornerRadius = 4;
+    self.logTextView.backgroundColor = [UIColor grayColor];
+    
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+- (void)updatePersistenceConnections {
+    PersistenceMode currPersistenceMode = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
+        
+    // setup UDPConnection if enabled
+    if (currPersistenceMode & PersistenceModeUDP) {
+        if (!self.udpConnection) {
+            self.udpConnection = [[UDPConnection alloc] init];
+        }
+        
+        NSString *hostIP = [[NSUserDefaults standardUserDefaults] objectForKey:HOST_IP_KEY];
+        if (hostIP) {
+            self.udpConnection.socketHost = hostIP;
+        }
+        
+        [self.udpConnection setupSocket];
+    } else {
+        // kill existing udpConnection if it exists
+        [self.udpConnection close];
+        self.udpConnection = nil;
+    }
+    
+    // setup LogConnection if enabled
+    if (currPersistenceMode & PersistenceModeLogFile) {
+        if (!self.logConnection) {
+            self.logConnection = [[LogConnection alloc] init];
+        }
+    } else {
+        // kill existing log connection if it exists
+        self.logConnection = nil;
+    }
 }
 
-#pragma mark - Flipside View
 
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller
-{
-    [self dismissViewControllerAnimated:YES completion:nil];
+#pragma mark - IBActions
+
+- (IBAction)toggleRecording:(id)sender {
+    isRecording = !isRecording;
+    
+    [self updateToggleRecordingButton];
+    
+    NSLog(@"Updating recording state: %@", isRecording ? @"YES" : @"NO");
 }
 
-- (IBAction)showInfo:(id)sender
-{    
-    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideViewController" bundle:nil];
+- (IBAction)showInfo:(id)sender {
+    
+    DinoLaserSettings *settings = [DinoLaserSettings new];
+    settings.persistenceModes = [[NSUserDefaults standardUserDefaults] integerForKey:PERSISTENCE_MODES_SETTINGS_KEY];
+    
+    NSString *ip = [[NSUserDefaults standardUserDefaults] objectForKey:HOST_IP_KEY];
+    if (!ip) {
+        ip = DEFAULT_HOST;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:ip forKey:HOST_IP_KEY];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    settings.hostIP = ip;
+    
+    
+    FlipsideViewController *controller = [[FlipsideViewController alloc] initWithDinoLaserSettings:settings];
     controller.delegate = self;
     controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [self presentViewController:controller animated:YES completion:nil];
 }
 
-- (IBAction)send:(id)sender
-{
-    long tag = 001;
+- (IBAction)markString:(id)sender {
+    if ([self.markerStringTextField.text isEqualToString:@""]) {
+        self.motionController.markerString = nil;
+    } else {
+        self.motionController.markerString = self.markerStringTextField.text;
+    }
+    NSLog(@"Updated Marker String to: %@", self.motionController.markerString);
+    [self.markerStringTextField resignFirstResponder];
     
-    CMDeviceMotion *deviceMotion = self.motionManager.deviceMotion;
+    // start a new logconnection file
+    self.logConnection.fileNamePrefix = self.motionController.markerString;
     
-    CMAcceleration acceleration = deviceMotion.userAcceleration;
-    CMRotationRate rotationRate = deviceMotion.rotationRate;
-    
-    NSString *motionString = [NSString stringWithFormat:@"%f,%f,%f,%f,%f,%f", acceleration.x, acceleration.y, acceleration.z, rotationRate.x, rotationRate.y, rotationRate.z];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Start new log file?" message:nil delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil, nil];
+    [alertView show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [self.logConnection beginNewFile];
+    }
+}
+
+
+#pragma mark - Timer & Data Processing
+
+// Timer callback
+-(void)timerFired:(NSTimer *)theTimer {
+    if (isRecording) {
+        [self processMotionData];
+    }
+}
+
+- (void)processMotionData {
+    NSString *motionString = [self.motionController currentMotionString];
     
     NSLog(@"motionString: %@", motionString);
+    [self appendToLog:motionString];
     
-	//NSString *msg = @"0.000000,0.016000,-0.005000,-0.985000";
-	NSData *data = [motionString dataUsingEncoding:NSUTF8StringEncoding];
-	[udpSocket sendData:data toHost:self.socketHost port:self.socketPort withTimeout:-1 tag:tag];
-	
-	//[self logMessage:FORMAT(@"SENT (%i): %@", (int)tag, msg)];
-	//tag++;
+    // pass update to udpConnection if it exists
+    [self.udpConnection sendMessage:motionString withTag:tag];
+    
+    // pass update to logConnection if it exists
+    [self.logConnection printLineToLog:motionString];
+    
+    // increment the tag
+    self.tag++;
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket *)sock didSendDataWithTag:(long)tag
-{
-	// You could add checks here
+
+#pragma mark - FlipsideViewDelegate
+
+- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket *)sock didNotSendDataWithTag:(long)tag dueToError:(NSError *)error
-{
-	// You could add checks here
+- (void)flipsideViewController:(FlipsideViewController *)controller didUpdateSettings:(DinoLaserSettings *)settings {
+    
+    // Save new settings info in defaults
+    [[NSUserDefaults standardUserDefaults] setInteger:settings.persistenceModes forKey:PERSISTENCE_MODES_SETTINGS_KEY];
+    if (settings.hostIP) {
+        [[NSUserDefaults standardUserDefaults] setObject:settings.hostIP forKey:HOST_IP_KEY];
+    }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    // update the persistent connections with the changes
+    [self updatePersistenceConnections];
 }
 
-- (void)udpSocket:(GCDAsyncUdpSocket *)sock didReceiveData:(NSData *)data
-      fromAddress:(NSData *)address
-withFilterContext:(id)filterContext
-{
-	NSString *msg = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-	if (msg)
-	{
-		//[self logMessage:FORMAT(@"RECV: %@", msg)];
-	}
-	else
-	{
-		NSString *host = nil;
-		uint16_t port = 0;
-		[GCDAsyncUdpSocket getHost:&host port:&port fromAddress:address];
-		
-		//[self logInfo:FORMAT(@"RECV: Unknown message from: %@:%hu", host, port)];
-	}
+#pragma mark - Scrolling OnScreen Log 
+
+- (void)appendToLog:(NSString *)suffix {
+    logString = [logString stringByAppendingString:suffix];
+    if (logString.length >= LOG_BUFFER_SIZE) {
+        logString = [logString substringFromIndex:logString.length - LOG_BUFFER_SIZE];
+    }
+    
+    self.logTextView.text = logString;
+    
+    NSRange range = NSMakeRange(self.logTextView.text.length - 1, 1);
+    [self.logTextView scrollRangeToVisible:range];
 }
 
+
+#pragma mark - Misc View setup
+
+- (void)updateToggleRecordingButton {
+    NSString *text = isRecording ? @"Pause" : @"Play";
+    [self.toggleLoggingButton setTitle:text forState:UIControlStateNormal];
+}
 
 @end
